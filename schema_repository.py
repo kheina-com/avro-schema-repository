@@ -34,7 +34,8 @@ class SchemaRepository(SqlInterface) :
 			FROM kheina.public.avro_schemas
 			WHERE fingerprint = %s;
 			""",
-			(fp,),
+			# because crc returns unsigned, we "convert" to signed
+			(fp - 9223372036854775808,),
 			fetch_one=True,
 		)
 
@@ -47,8 +48,7 @@ class SchemaRepository(SqlInterface) :
 	@HttpErrorHandler('saving schema')
 	async def addSchema(self, schema: AvroSchema) -> int :
 		data: bytes = ujson.dumps(schema).encode()
-		# because crc returns unsigned, we "convert" to signed
-		fingerprint: int = crc(data) - 9223372036854775808
+		fingerprint: int = crc(data)
 
 		await self.query_async("""
 			INSERT INTO kheina.public.avro_schemas
@@ -59,7 +59,8 @@ class SchemaRepository(SqlInterface) :
 				UPDATE SET
 					schema = %s;
 			""",
-			(fingerprint, data, data),
+			# because crc returns unsigned, we "convert" to signed
+			(fingerprint - 9223372036854775808, data, data),
 			commit=True,
 		)
 
