@@ -64,7 +64,7 @@ class SchemaRepository(SqlInterface) :
 			commit=True,
 		)
 
-		fp: str = b64encode(int_to_bytes(fingerprint)).encode()
+		fp: str = b64encode(int_to_bytes(fingerprint)).decode()
 		KVS.put(fp, schema)
 
 		return fp
