@@ -8,11 +8,18 @@ from kh_common.caching.key_value_store import KeyValueStore
 from kh_common.crc import CRC
 from kh_common.exceptions.http_error import HttpErrorHandler, NotFound
 from kh_common.sql import SqlInterface
-from kh_common.utilities import int_from_bytes, int_to_bytes
 
 
 KVS: KeyValueStore = KeyValueStore('kheina', 'avro_schemas', local_TTL=60)
 crc: CRC = CRC(64)
+
+
+def int_to_bytes(integer: int) -> bytes :
+	return integer.to_bytes(8, 'little')
+
+
+def int_from_bytes(bytestring: bytes) -> int :
+	return int.from_bytes(bytestring, 'little')
 
 
 class SchemaRepository(SqlInterface) :
