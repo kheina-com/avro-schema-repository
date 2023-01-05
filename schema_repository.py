@@ -46,7 +46,7 @@ class SchemaRepository(SqlInterface) :
 
 	@HttpErrorHandler('saving schema')
 	async def addSchema(self, schema: AvroSchema) -> int :
-		data: bytes = ujson.dumps(schema)
+		data: bytes = ujson.dumps(schema).encode()
 		fingerprint: int = crc(data)
 
 		await self.query_async("""
