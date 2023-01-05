@@ -36,7 +36,7 @@ async def v1Schema(fingerprint: str) :
 @app.post('/v1/schema', response_model=SaveResponse)
 async def v1SaveSchema(req: Request) :
 	return SaveResponse(
-		fingerprint=await repo.addSchema(await req.body()),
+		fingerprint=await repo.addSchema(await req.json()),
 	)
 
 
