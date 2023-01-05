@@ -7,6 +7,7 @@ from kh_common.caching import AerospikeCache
 from kh_common.caching.key_value_store import KeyValueStore
 from kh_common.crc import CRC
 from kh_common.exceptions.http_error import HttpErrorHandler, NotFound
+from kh_common.sql import SqlInterface
 
 
 KVS: KeyValueStore = KeyValueStore('kheina', 'avro_schemas', local_TTL=60)
