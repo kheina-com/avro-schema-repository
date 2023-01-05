@@ -28,7 +28,7 @@ async def shutdown() :
 	repo.close()
 
 
-@app.get('/v1/schema/{fingerprint}', response_model=AvroSchema)
+@app.get('/v1/schema/{fingerprint}')
 async def v1Schema(fingerprint: str) :
 	return await repo.getSchema(fingerprint)
 

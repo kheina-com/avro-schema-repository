@@ -46,7 +46,7 @@ class SchemaRepository(SqlInterface) :
 
 
 	@HttpErrorHandler('saving schema')
-	async def addSchema(self, schema: AvroSchema) -> int :
+	async def addSchema(self, schema: AvroSchema) -> str :
 		data: bytes = ujson.dumps(schema).encode()
 		fingerprint: int = crc(data)
 
@@ -64,7 +64,7 @@ class SchemaRepository(SqlInterface) :
 			commit=True,
 		)
 
-		fp: str = b64encode(int_to_bytes(fingerprint))
+		fp: str = b64encode(int_to_bytes(fingerprint)).encode()
 		KVS.put(fp, schema)
 
 		return fp
