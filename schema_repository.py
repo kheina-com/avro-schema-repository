@@ -8,6 +8,7 @@ from kh_common.caching.key_value_store import KeyValueStore
 from kh_common.crc import CRC
 from kh_common.exceptions.http_error import HttpErrorHandler, NotFound
 from kh_common.sql import SqlInterface
+from kh_common.utilities import int_from_bytes, int_to_bytes
 
 
 KVS: KeyValueStore = KeyValueStore('kheina', 'avro_schemas', local_TTL=60)
@@ -19,7 +20,7 @@ class SchemaRepository(SqlInterface) :
 	@HttpErrorHandler('retrieving schema')
 	@AerospikeCache('kheina', 'avro_schemas', '{fingerprint}', _kvs=KVS)
 	async def getSchema(self, fingerprint: str) -> AvroSchema :
-		fp: int = b64decode(fingerprint)
+		fp: int = int_from_bytes(b64decode(fingerprint))
 
 		data: List[bytes] = await self.query_async("""
 			SELECT schema
@@ -54,7 +55,7 @@ class SchemaRepository(SqlInterface) :
 			commit=True,
 		)
 
-		fp: str = b64encode(fingerprint)
+		fp: str = b64encode(int_to_bytes(fingerprint))
 		KVS.put(fp, schema)
 
 		return fp
