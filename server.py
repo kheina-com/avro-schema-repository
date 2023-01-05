@@ -1,5 +1,5 @@
 from avrofastapi.schema import AvroSchema
-from kh_common.server import ServerApp
+from kh_common.server import Request, ServerApp
 
 from models import SaveResponse
 from schema_repository import SchemaRepository
@@ -34,9 +34,9 @@ async def v1Schema(fingerprint: str) :
 
 
 @app.post('/v1/schema', response_model=SaveResponse)
-async def v1SaveSchema(body: AvroSchema) :
+async def v1SaveSchema(req: Request) :
 	return SaveResponse(
-		fingerprint=await repo.addSchema(body),
+		fingerprint=await repo.addSchema(await req.body()),
 	)
 
 
