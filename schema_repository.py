@@ -42,7 +42,7 @@ class SchemaRepository(SqlInterface) :
 		if not data :
 			raise NotFound('no data was found for the provided schema fingerprint.')
 
-		return ujson.loads(data[0])
+		return ujson.loads(data[0].tobytes())
 
 
 	@HttpErrorHandler('saving schema')
